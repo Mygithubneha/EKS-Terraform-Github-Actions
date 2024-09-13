@@ -1,7 +1,7 @@
 resource "aws_eks_cluster" "eks" {
 
   count    = var.is-eks-cluster-enabled == true ? 1 : 0
-  name     = var.cluster-name
+  name     = var.cluster_name
   role_arn = aws_iam_role.eks-cluster-role[count.index].arn
   version  = var.cluster-version
 
@@ -19,7 +19,7 @@ resource "aws_eks_cluster" "eks" {
   }
 
   tags = {
-    Name = var.cluster-name
+    Name = var.cluster_name
     Env  = var.env
   }
 }
@@ -48,7 +48,7 @@ resource "aws_eks_addon" "eks-addons" {
 # NodeGroups
 resource "aws_eks_node_group" "ondemand-node" {
   cluster_name    = aws_eks_cluster.eks[0].name
-  node_group_name = "${var.cluster-name}-on-demand-nodes"
+  node_group_name = "${var.cluster_name}-on-demand-nodes"
 
   node_role_arn = aws_iam_role.eks-nodegroup-role[0].arn
 
@@ -71,7 +71,7 @@ resource "aws_eks_node_group" "ondemand-node" {
     max_unavailable = 1
   }
   tags = {
-    "Name" = "${var.cluster-name}-ondemand-nodes"
+    "Name" = "${var.cluster_name}-ondemand-nodes"
   }
 
   depends_on = [aws_eks_cluster.eks]
